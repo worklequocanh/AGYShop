@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Search, ShoppingBag, Heart, User, LogOut,
   ChevronDown, X, Menu, Package, ShieldCheck, Database
@@ -16,6 +16,7 @@ import { CartDrawer } from "./CartDrawer";
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
   const { wishlistItems } = useWishlist();
@@ -96,6 +97,20 @@ export function Header() {
     router.push(`/shop?q=${encodeURIComponent(searchQuery.trim())}`);
   };
 
+  const isActive = (path: string) => {
+    if (path === "/") return pathname === "/";
+    return pathname.startsWith(path);
+  };
+
+  const getNavLinkClass = (path: string) => {
+    const active = isActive(path);
+    return `px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-150 ${
+      active
+        ? "bg-gray-900 text-white shadow-sm"
+        : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+    }`;
+  };
+
   return (
     <>
       {/* ── Fixed Top Navbar Container ── */}
@@ -122,17 +137,19 @@ export function Header() {
             </Link>
 
             {/* Nav Desktop */}
-            <nav className="hidden lg:flex items-center gap-1 flex-1">
-              <Link href="/" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors">
+            <nav className="hidden lg:flex items-center gap-1.5 flex-1">
+              <Link href="/" className={getNavLinkClass("/")}>
                 Trang chủ
               </Link>
-              <Link href="/shop" className="px-3 py-2 text-sm font-bold text-gray-900 hover:bg-gray-100 rounded-xl transition-colors">
+              <Link href="/shop" className={getNavLinkClass("/shop")}>
                 Cửa Hàng
               </Link>
 
               {/* Dropdown categories */}
               <div className="relative group">
-                <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors">
+                <button className={`flex items-center gap-1 px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-150 ${
+                  pathname.includes("category=") ? "bg-gray-900 text-white shadow-sm" : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                }`}>
                   Danh mục <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:rotate-180 transition-transform duration-200" />
                 </button>
                 <div className="absolute top-full left-0 w-64 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 pointer-events-none group-hover:pointer-events-auto z-50">
@@ -171,21 +188,25 @@ export function Header() {
               </div>
 
               {/* About Link */}
-              <Link href="/about" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors">
+              <Link href="/about" className={getNavLinkClass("/about")}>
                 Giới thiệu
               </Link>
 
               {/* Contact Link */}
-              <Link href="/contact" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors">
+              <Link href="/contact" className={getNavLinkClass("/contact")}>
                 Liên hệ
               </Link>
 
               {user?.role === "admin" && (
                 <Link
                   href="/admin"
-                  className="ml-1 px-3 py-1.5 text-xs font-bold text-amber-800 bg-amber-100/70 hover:bg-amber-200/80 border border-amber-300 rounded-xl transition-colors flex items-center gap-1"
+                  className={`ml-1 px-3 py-1.5 text-xs font-bold rounded-xl transition-colors flex items-center gap-1 ${
+                    pathname.startsWith("/admin")
+                      ? "bg-amber-800 text-white shadow-sm"
+                      : "text-amber-800 bg-amber-100/70 hover:bg-amber-200/80 border border-amber-300"
+                  }`}
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
+                  <ShieldCheck className="w-3.5 h-3.5" />
                   Admin
                 </Link>
               )}
@@ -249,7 +270,9 @@ export function Header() {
 
               {/* Wishlist Link */}
               <Link href="/wishlist"
-                className="flex w-9 h-9 items-center justify-center relative text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+                className={`flex w-9 h-9 items-center justify-center relative rounded-xl transition-colors ${
+                  pathname === "/wishlist" ? "bg-rose-50 text-rose-600 font-bold" : "text-gray-700 hover:bg-gray-100"
+                }`}
                 title="Yêu thích">
                 <Heart className="w-[19px] h-[19px]" />
                 {wishlistItems.length > 0 && (
@@ -260,18 +283,22 @@ export function Header() {
               {/* Shopping Bag Link */}
               <Link
                 href={user ? "/cart" : "/login?redirect=/cart"}
-                className="flex w-9 h-9 items-center justify-center relative text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+                className={`flex w-9 h-9 items-center justify-center relative rounded-xl transition-colors ${
+                  pathname === "/cart" ? "bg-gray-900 text-white" : "text-gray-700 hover:bg-gray-100"
+                }`}
                 title="Giỏ hàng"
               >
                 <ShoppingBag className="w-[19px] h-[19px]" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-[16px] h-[16px] bg-gray-900 text-white text-[9px] font-black rounded-full flex items-center justify-center">{cartCount}</span>
+                  <span className="absolute -top-0.5 -right-0.5 w-[16px] h-[16px] bg-gray-900 text-white text-[9px] font-black rounded-full flex items-center justify-center border border-white">{cartCount}</span>
                 )}
               </Link>
 
               {user ? (
                 <div className="relative group ml-1">
-                  <button className="w-9 h-9 rounded-xl overflow-hidden border-2 border-gray-200 hover:border-accent/60 transition-colors flex items-center justify-center bg-gray-100 shadow-sm">
+                  <button className={`w-9 h-9 rounded-xl overflow-hidden border-2 transition-colors flex items-center justify-center bg-gray-100 shadow-sm ${
+                    pathname === "/profile" ? "border-gray-900 ring-2 ring-gray-900/20" : "border-gray-200 hover:border-accent/60"
+                  }`}>
                     {user.image ? (
                       <img src={user.image} alt={user.username} className="w-full h-full object-cover" />
                     ) : (
@@ -344,7 +371,11 @@ export function Header() {
                 { href: "/wishlist", label: "Yêu thích" },
               ].map((l) => (
                 <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
-                  className="block px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl">
+                  className={`block px-3 py-2.5 text-sm font-semibold rounded-xl transition-colors ${
+                    isActive(l.href)
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-700 hover:bg-gray-50"
+                  }`}>
                   {l.label}
                 </Link>
               ))}
