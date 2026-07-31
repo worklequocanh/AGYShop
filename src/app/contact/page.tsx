@@ -19,18 +19,31 @@ export default function ContactPage() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
-      showToast("Cảm ơn bạn! Tin nhắn liên hệ đã được gửi thành công. Bộ phận CSKH sẽ phản hồi sớm nhất.", "success");
-      setName("");
-      setEmail("");
-      setPhone("");
-      setSubject("");
-      setMessage("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, subject, message }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast("Cảm ơn bạn! Lời nhắn của bạn đã được gửi thành công đến hệ thống Admin AGYShop.", "success");
+        setName("");
+        setEmail("");
+        setPhone("");
+        setSubject("");
+        setMessage("");
+      } else {
+        showToast("Lỗi: " + (data.error || "Không thể gửi tin nhắn"), "error");
+      }
+    } catch {
+      showToast("Lỗi kết nối máy chủ", "error");
+    } finally {
       setSubmitting(false);
-    }, 600);
+    }
   };
 
   const mapEmbedUrl = "https://maps.google.com/maps?q=12%20Tr%E1%BB%8Bnh%20%C4%90%C3%ACnh%20Th%E1%BA%A3o%2C%20H%C3%B2a%20Th%E1%BA%A3nh%2C%20T%C3%A2n%20Ph%C3%BA%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh&t=&z=16&ie=UTF8&iwloc=&output=embed";
@@ -123,7 +136,7 @@ export default function ContactPage() {
               <MessageSquare className="w-5 h-5 text-accent" /> Gửi Lời Nhắn Cho Chúng Tôi
             </h3>
             <p className="text-xs text-gray-500 mt-1">
-              Vui lòng điền thông tin bên dưới, nhân viên chăm sóc khách hàng sẽ liên hệ lại ngay.
+              Vui lòng điền thông tin bên dưới, tin nhắn của bạn sẽ được chuyển thẳng đến bộ phận Quản trị Admin.
             </p>
           </div>
 
@@ -196,7 +209,7 @@ export default function ContactPage() {
               className="w-full bg-gray-900 hover:bg-gray-800 text-white font-extrabold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md text-xs disabled:opacity-50"
             >
               <Send className="w-4 h-4 text-amber-400" />
-              {submitting ? "Đang gửi tin nhắn..." : "Gửi Tin Nhắn Liên Hệ"}
+              {submitting ? "Đang lưu tin nhắn vào MongoDB..." : "Gửi Tin Nhắn Cho Admin"}
             </button>
           </form>
         </div>

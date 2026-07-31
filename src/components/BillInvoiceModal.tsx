@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, Printer, CheckCircle2, Package, ShieldCheck, QrCode, FileText } from "lucide-react";
+import { X, Printer, CheckCircle2, FileText, Download } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
+import { OrderTimeline } from "./OrderTimeline";
 
 interface BillInvoiceModalProps {
   order: any | null;
@@ -34,7 +35,7 @@ export function BillInvoiceModal({ order, isOpen, onClose }: BillInvoiceModalPro
   };
 
   const invoiceDate = order.createdAt ? new Date(order.createdAt).toLocaleString("vi-VN") : new Date().toLocaleString("vi-VN");
-  const isPaid = order.paymentStatus === "paid";
+  const isPaid = order.paymentStatus === "paid" || order.isPaid;
 
   const modalContent = (
     <div
@@ -52,24 +53,24 @@ export function BillInvoiceModal({ order, isOpen, onClose }: BillInvoiceModalPro
       onClick={onClose}
     >
       <div
-        className="bg-white border border-gray-200 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-fade-up text-gray-900"
+        className="bg-white border border-gray-200 rounded-3xl shadow-2xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden animate-fade-up text-gray-900"
         onClick={(e) => e.stopPropagation()}
         style={{ pointerEvents: "auto" }}
       >
         
         {/* Header Action Controls (Hidden on Print) */}
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50 print:hidden">
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50 print:hidden flex-shrink-0">
           <div className="flex items-center gap-2">
             <FileText className="w-5 h-5 text-accent" />
-            <span className="font-extrabold text-sm text-gray-900">Chi Tiết Hóa Đơn Điện Tử</span>
+            <span className="font-extrabold text-sm text-gray-900">Hóa Đơn & Tiến Trình Đơn Hàng</span>
           </div>
           
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95"
             >
-              <Printer className="w-4 h-4 text-amber-400" /> In / Tải PDF
+              <Printer className="w-4 h-4 text-amber-400" /> In / Tải Hóa Đơn PDF
             </button>
             <button
               onClick={onClose}
@@ -83,6 +84,11 @@ export function BillInvoiceModal({ order, isOpen, onClose }: BillInvoiceModalPro
         {/* PRINTABLE BILL TEMPLATE */}
         <div className="p-6 sm:p-8 overflow-y-auto space-y-6 bg-white font-sans text-xs">
           
+          {/* Order 4-step Timeline (Hidden on Print) */}
+          <div className="print:hidden">
+            <OrderTimeline order={order} />
+          </div>
+
           {/* Bill Top Header */}
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-gray-200 pb-5">
             <div>
@@ -93,12 +99,13 @@ export function BillInvoiceModal({ order, isOpen, onClose }: BillInvoiceModalPro
                 <span className="font-black text-xl tracking-tighter text-gray-900">AGYShop E-Commerce</span>
               </div>
               <p className="text-[11px] text-gray-500 mt-1">Cửa Hàng Mua Sắm Trực Tuyến Chính Hãng</p>
+              <p className="text-[11px] text-gray-400">Trụ sở: 12 Trịnh Đình Thảo, Tân Phú, TP.HCM (Trường CĐ CNTT TP.HCM)</p>
               <p className="text-[11px] text-gray-400">Hotline: 1900-8888 • Email: cskh@agyshop.vn</p>
             </div>
 
             <div className="sm:text-right space-y-1">
               <h2 className="text-xl font-black uppercase text-gray-900 tracking-wider">HÓA ĐƠN BÁN HÀNG</h2>
-              <p className="font-mono text-xs text-accent font-bold">Mã đơn: {order.orderCode}</p>
+              <p className="font-mono text-xs text-accent font-bold">Mã đơn: #{order.orderCode || order.id || order._id}</p>
               <p className="text-[11px] text-gray-500">Ngày lập: {invoiceDate}</p>
 
               {/* Status Stamp */}
@@ -116,17 +123,17 @@ export function BillInvoiceModal({ order, isOpen, onClose }: BillInvoiceModalPro
           <div className="bg-gray-50/80 border border-gray-200 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <span className="text-gray-400 font-bold uppercase text-[9px] tracking-wider block">Khách hàng nhận hàng</span>
-              <p className="font-bold text-gray-900 text-xs mt-0.5">{order.shippingAddress?.name || "Khách hàng"}</p>
-              <p className="text-gray-500 text-[11px]">SĐT: {order.shippingAddress?.phone || "N/A"}</p>
+              <p className="font-bold text-gray-900 text-xs mt-0.5">{order.shippingAddress?.name || order.fullName || "Khách hàng"}</p>
+              <p className="text-gray-500 text-[11px]">SĐT: {order.shippingAddress?.phone || order.phone || "N/A"}</p>
               <p className="text-gray-500 text-[11px]">Tài khoản: @{order.username || "guest"}</p>
             </div>
             <div>
               <span className="text-gray-400 font-bold uppercase text-[9px] tracking-wider block">Địa chỉ giao hàng</span>
               <p className="font-medium text-gray-800 text-[11px] mt-0.5 leading-relaxed">
-                {order.shippingAddress?.address}
+                {order.shippingAddress?.address || order.address || "12 Trịnh Đình Thảo, Tân Phú, HCM"}
               </p>
               <p className="text-gray-500 text-[11px] mt-1">
-                Phương thức: <span className="font-bold uppercase text-gray-800">{order.paymentMethod}</span>
+                Phương thức: <span className="font-bold uppercase text-gray-800">{order.paymentMethod || "vietqr"}</span>
               </p>
             </div>
           </div>
@@ -163,7 +170,7 @@ export function BillInvoiceModal({ order, isOpen, onClose }: BillInvoiceModalPro
             {/* Barcode & Verification */}
             <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-200 w-full sm:w-auto">
               <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${encodeURIComponent(`VERIFY-INVOICE-${order.orderCode}`)}`}
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${encodeURIComponent(`VERIFY-INVOICE-${order.orderCode || order.id || order._id}`)}`}
                 alt="Verification QR"
                 className="w-12 h-12 object-contain rounded-md"
               />
