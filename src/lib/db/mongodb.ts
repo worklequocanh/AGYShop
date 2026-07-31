@@ -12,7 +12,11 @@ function configureDNS() {
 
 configureDNS();
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://worklequocanh_db_user:12345@clusterdemo.dhoy5hp.mongodb.net/";
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+  throw new Error("MONGODB_URI environment variable is not defined. Please set it in .env.local or Fly.io secrets.");
+}
 
 let cached = (global as any).mongoose;
 
@@ -33,7 +37,7 @@ export async function connectToDatabase() {
       serverSelectionTimeoutMS: 10000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance) => {
+    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongooseInstance) => {
       console.log("⚡ MongoDB Atlas connected successfully!");
       return mongooseInstance;
     }).catch((err) => {
