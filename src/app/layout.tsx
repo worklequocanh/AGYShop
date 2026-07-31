@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className={`${inter.className} bg-surface text-primary min-h-screen flex flex-col overflow-x-hidden`}>
+      <body className={`${inter.className} bg-surface text-primary min-h-screen flex flex-col`}>
         <Providers>
           <div className="flex flex-col min-h-screen">
             {/* Navigation Header */}

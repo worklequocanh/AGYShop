@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Search, ShoppingBag, Heart, User, LogOut,
-  ChevronDown, X, Menu, Package, ShieldCheck, Database, Info, PhoneCall
+  ChevronDown, X, Menu, Package, ShieldCheck, Database
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
@@ -98,8 +98,8 @@ export function Header() {
 
   return (
     <>
-      {/* ── Fixed Top Sticky Navbar Container ── */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border shadow-sm">
+      {/* ── Fixed Top Navbar Container ── */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-border shadow-sm">
         
         {/* Top Announcement Bar */}
         <div className="bg-gray-900 text-white text-xs text-center py-1.5 px-4 font-medium tracking-wide">
@@ -107,7 +107,7 @@ export function Header() {
         </div>
 
         {/* Main Header Bar */}
-        <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16 gap-4">
 
             {/* Logo */}
@@ -231,7 +231,7 @@ export function Header() {
                       ))}
                       <div className="border-t border-border mt-1 pt-1 px-2">
                         <button onClick={handleSearch} className="text-xs font-bold text-accent hover:underline w-full text-left py-1">
-                          Xem tất cả kết quả cho "{searchQuery}" →
+                          Xem tất cả kết quả cho &quot;{searchQuery}&quot; →
                         </button>
                       </div>
                     </div>
@@ -320,7 +320,7 @@ export function Header() {
               </button>
             </div>
           </div>
-        </header>
+        </div>
 
         {/* Mobile Menu */}
         {mobileOpen && (
@@ -363,8 +363,10 @@ export function Header() {
             </div>
           </div>
         )}
+      </header>
 
-      </div>
+      {/* Spacer div for fixed top header */}
+      <div className="h-[92px]" />
 
       <CartDrawer />
     </>
