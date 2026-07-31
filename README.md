@@ -1,13 +1,13 @@
 # 🛍️ AGYShop - Modern Full-Stack E-Commerce Platform
 
-[![Live Demo](https://img.shields.io/badge/Fly.io-Live_Demo-purple?style=for-the-badge&logo=fly.io)](https://agyshop-worklequocanh.fly.dev)
+[![Live Demo](https://img.shields.io/badge/Fly.io-Live_Demo-purple?style=for-the-badge&logo=fly.io)](https://agyshop.fly.dev)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB_Atlas-Database-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
 [![VietQR](https://img.shields.io/badge/VietQR-Payment_Gateway-0052CC?style=for-the-badge)](https://vietqr.io/)
 
-> 🌐 **Website Live Demo**: [https://agyshop-worklequocanh.fly.dev](https://agyshop-worklequocanh.fly.dev)
+> 🌐 **Website Live Demo**: [https://agyshop.fly.dev](https://agyshop.fly.dev)
 
 AGYShop là nền tảng Thương mại Điện tử (E-Commerce) hiện đại, được xây dựng bằng **Next.js 14 (App Router)**, **TypeScript**, **TailwindCSS** và **MongoDB Atlas**. Dự án được tích hợp đầy đủ tính năng mua sắm cao cấp, giả lập thanh toán **VietQR**, in **Hóa đơn điện tử (Bill Invoice)**, quản lý đơn hàng **Admin Dashboard**, và Việt hóa 100% dữ liệu sản phẩm.
 
