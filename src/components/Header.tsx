@@ -104,7 +104,7 @@ export function Header() {
 
   const getNavLinkClass = (path: string) => {
     const active = isActive(path);
-    return `px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-150 ${
+    return `px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-150 whitespace-nowrap inline-flex items-center justify-center ${
       active
         ? "bg-gray-900 text-white shadow-sm"
         : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
@@ -123,10 +123,10 @@ export function Header() {
 
         {/* Main Header Bar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16 gap-4">
+          <div className="flex items-center h-16 gap-3 sm:gap-6">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 mr-4">
+            <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 mr-2 sm:mr-4">
               <div className="w-8.5 h-8.5 bg-gray-900 rounded-xl flex items-center justify-center shadow-md">
                 <Package className="w-5 h-5 text-white" strokeWidth={2.5} />
               </div>
@@ -137,7 +137,7 @@ export function Header() {
             </Link>
 
             {/* Nav Desktop */}
-            <nav className="hidden lg:flex items-center gap-1.5 flex-1">
+            <nav className="hidden lg:flex items-center gap-1.5 flex-shrink-0">
               <Link href="/" className={getNavLinkClass("/")}>
                 Trang chủ
               </Link>
@@ -147,7 +147,7 @@ export function Header() {
 
               {/* Dropdown categories */}
               <div className="relative group">
-                <button className={`flex items-center gap-1 px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-150 ${
+                <button className={`flex items-center gap-1 px-3.5 py-2 text-sm font-semibold rounded-xl transition-all duration-150 whitespace-nowrap ${
                   pathname.includes("category=") ? "bg-gray-900 text-white shadow-sm" : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                 }`}>
                   Danh mục <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:rotate-180 transition-transform duration-200" />
@@ -200,7 +200,7 @@ export function Header() {
               {user?.role === "admin" && (
                 <Link
                   href="/admin"
-                  className={`ml-1 px-3 py-1.5 text-xs font-bold rounded-xl transition-colors flex items-center gap-1 ${
+                  className={`ml-1 px-3 py-1.5 text-xs font-bold rounded-xl transition-colors flex items-center gap-1 whitespace-nowrap ${
                     pathname.startsWith("/admin")
                       ? "bg-amber-800 text-white shadow-sm"
                       : "text-amber-800 bg-amber-100/70 hover:bg-amber-200/80 border border-amber-300"
@@ -213,7 +213,7 @@ export function Header() {
             </nav>
 
             {/* Search Bar */}
-            <div ref={searchRef} className="relative flex-1 max-w-xs hidden md:block">
+            <div ref={searchRef} className="relative flex-1 max-w-xs hidden md:block ml-auto">
               <form onSubmit={handleSearch}>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
@@ -262,7 +262,7 @@ export function Header() {
             </div>
 
             {/* Actions (Wishlist & Cart & Profile) */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-shrink-0">
               <button onClick={toggleCurrency}
                 className="hidden sm:flex w-9 h-9 items-center justify-center text-xs font-extrabold text-gray-700 hover:bg-gray-100 rounded-xl transition-colors">
                 {currency}
@@ -336,7 +336,7 @@ export function Header() {
                 </div>
               ) : (
                 <Link href="/login"
-                  className="ml-1 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-xs font-extrabold rounded-xl transition-colors shadow-sm">
+                  className="ml-1 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-xs font-extrabold rounded-xl transition-colors shadow-sm whitespace-nowrap">
                   Đăng nhập
                 </Link>
               )}
