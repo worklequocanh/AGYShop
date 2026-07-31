@@ -141,9 +141,8 @@ AGYShop/
 
 ---
 
-## 📝 Giấy Phép & Tác Giả (Author & License)
+## 👤 Tác Giả (Author)
 
 - **Đơn vị phát triển**: **Trường Cao đẳng Công nghệ Thông tin TP.HCM (ITC)**
 - **Tác giả**: **Lê Quốc Anh (worklequocanh)**
 - **Địa chỉ**: *12 Trịnh Đình Thảo, Phường Hòa Thạnh, Quận Tân Phú, TP. Hồ Chí Minh*
-- **Giấy phép**: Distributed under the MIT License.
